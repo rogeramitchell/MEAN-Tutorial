@@ -1,4 +1,4 @@
-var app = angular.module('flapperNews'), []);
+var app = angular.module('flapperNews', []);
 
 app.controller('MainCtrl', [
 	'$scope',
