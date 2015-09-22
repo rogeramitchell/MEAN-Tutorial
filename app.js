@@ -22,4 +22,9 @@ app.controller('MainCtrl', [
 		$scope.incrementUpvotes = function(post) {
 			post.upvotes += 1;
 		};
+
+		$scope.decrementUpvotes = function(post) {
+			if(post.upvotes == 0) {return; }
+			post.upvotes -= 1;
+		};
 	}]);
