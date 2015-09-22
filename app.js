@@ -18,6 +18,12 @@ app.config([
 				templateUrl: '/home.html',
 				controller: 'MainCtrl'
 			});
+
+			.state('posts', {
+				url: '/posts/{id}',
+				templateUrl: '/posts.html',
+				controller: 'PostsCtrl'
+			});
 		$urlRouteProvider.otherwise('home');
 }]);
 
@@ -41,7 +47,11 @@ app.controller('MainCtrl', [
 			$scope.posts.push({
 				title: $scope.title, 
 				link: $scope.link,
-				upvotes: 0
+				upvotes: 0,
+				comments: [
+					{author: 'Joe', body: 'Simpsons did it!', upvotes: 0},
+					{author: 'Susan', body: 'cool stuff!', upvotes: 0}
+				]
 			});
 			$scope.title = '';
 			$scope.link = '';
@@ -56,3 +66,11 @@ app.controller('MainCtrl', [
 			post.upvotes -= 1;
 		};
 	}]);
+
+app.controller('PostsCtrl', [
+	'$scope',
+	'$stateParams',
+	'posts',
+	function($scope, $stateParams, posts){
+		$scope.post = posts.posts[$stateParams.id];
+}]);
