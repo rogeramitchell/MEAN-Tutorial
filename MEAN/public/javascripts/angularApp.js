@@ -17,6 +17,28 @@ app.factory('posts', ['$http', function($http) {
 		});
 	};
 
+	o.upvote = function(post) {
+		return $http.put('/posts/' + post._id + '/upvote').success(function(data) {
+			post.upvote += 1;
+		});
+	};
+
+	o.get = function(id) {
+		return $http.get('/posts/' + id).then(function(res) {
+			return res.data;
+		});
+	};
+
+	o.addComment = function(id, comment) {
+		return $http.post('/posts/' + id + '/comments', comment);
+	};
+
+	o.upvoteComment = function(post, comment) {
+		return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote').success(function(data) {
+			comment.upvotes += 1;
+		});
+	};
+
 	return o;
 }]);
 
@@ -40,7 +62,12 @@ app.config([
 			.state('posts', {
 				url: '/posts/{id}',
 				templateUrl: '/posts.html',
-				controller: 'PostsCtrl'
+				controller: 'PostsCtrl',
+				resolve: {
+					post: ['$stateParams', 'posts', function($stateParams, posts) {
+						return posts.get($stateParams.id);
+					}]
+				}
 			});
 		$urlRouteProvider.otherwise('home');
 }]);
@@ -72,7 +99,7 @@ app.controller('MainCtrl', [
 		};
 
 		$scope.incrementUpvotes = function(post) {
-			post.upvotes += 1;
+			posts.upvote(post);
 		};
 
 		$scope.decrementUpvotes = function(post) {
@@ -83,19 +110,25 @@ app.controller('MainCtrl', [
 
 app.controller('PostsCtrl', [
 	'$scope',
-	'$stateParams',
 	'posts',
-	function($scope, $stateParams, posts){
-		$scope.post = posts.posts[$stateParams.id];
+	'post',
+	function($scope, posts, post){
+		$scope.post = post;
 
 		$scope.addComment = function() {
 			if($scope.body ==== '') {return; }
-			$scope.post.comments.push({
+
+			posts.addComment(post._id, {
 				body: $scope.body,
-				author: 'user',
-				upvotes: 0
+				author: 'user'
+			}).success(function(comment) {
+				$scope.post.comments.push(comment);
 			});
 			$scope.body = '';
+		};
+
+		$scope.incrementUpvotes = function(comment) {
+			posts.upvoteComment(post, comment);
 		};
 }]);
 
