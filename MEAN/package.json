@@ -1,12 +1,12 @@
 {
   "name": "MEAN",
   "version": "0.0.0",
-  "description" : "This is a project that is based on Thinker's MEAN stack tutorial.",
-  "homepage" : "https://github.com/rogeramitchell/MEAN-Tutorial",
-  "author" : {
-    "name" : "Roger Mitchell",
-    "url" : "https://github.com/rogeramitchell/"
-    },
+  "description": "This is a project that is based on Thinker's MEAN stack tutorial.",
+  "homepage": "https://github.com/rogeramitchell/MEAN-Tutorial",
+  "author": {
+    "name": "Roger Mitchell",
+    "url": "https://github.com/rogeramitchell/"
+  },
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
